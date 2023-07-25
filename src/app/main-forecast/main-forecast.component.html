@@ -20,24 +20,39 @@
     </div>
   </form>
   <div>
-    <div *ngIf="weatherData.name" class="well flex">
+    <div *ngIf="weatherData.city" class="well flex">
       <div>
-        <h3>{{ weatherData.name }}</h3>
-        <h4>Current conditions: {{ weatherData.clouds }}</h4>
+        <h3>{{ weatherData.city.name }}</h3>
+        <h4>
+          Current conditions: {{ weatherData.list[0].weather[0].description }}
+        </h4>
         <h4>Temperatures today:</h4>
         <p>
-          Current {{ weatherData.main.temp }} - Max:
-          {{ weatherData.main.temp_max }} - Min: {{ weatherData.main.temp_min }}
+          Current
+          {{
+            convertKelvinToCelsius(weatherData.list[0].main.temp).toFixed(0)
+          }}°C - Max:
+          {{
+            convertKelvinToCelsius(weatherData.list[0].main.temp_max).toFixed(
+              0
+            )
+          }}°C - Min:
+          {{
+            convertKelvinToCelsius(weatherData.list[0].main.temp_min).toFixed(
+              0
+            )
+          }}°C
         </p>
         <p>
           <a routerLink="/future"
-            >Show 5-day forecast for {{ weatherData.name }}</a
+            >Show 5-day forecast for {{ weatherData.city.name }}</a
           >
         </p>
       </div>
       <div>
         <span class="close">×</span>
-        <img src="https://www.angulartraining.com/images/weather/sun.png" />
+        <!-- <img src="https://www.angulartraining.com/images/weather/sun.png" /> -->
+        <img [src]="getWeatherIconUrl(weatherData.list[0].weather[0].main)" />
       </div>
     </div>
   </div>
