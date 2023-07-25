@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { WeatherForecast } from "./main-forecast/weather-forecast.interface";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -9,8 +11,8 @@ export class ForecastService {
   private forecastData: any;
   constructor(private htttp: HttpClient) {}
 
-  getWeather(location) {
-    return this.htttp.get(
+  getWeather(location): Observable<WeatherForecast> {
+    return this.htttp.get<WeatherForecast>(
       "https://api.openweathermap.org/data/2.5/forecast?q=" +
         location +
         "&cnt=5&appid=" +
