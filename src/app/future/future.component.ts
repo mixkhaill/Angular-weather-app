@@ -15,9 +15,6 @@ export class FutureComponent implements OnInit {
     console.log(this.forecastData, "forecast-future");
   }
 
-  convertKelvinToCelsius(kelvin: number): number {
-    return this.forecastService.convertKelvinToCelsius(kelvin);
-  }
   getWeatherIconUrl(weatherStatus: string) {
     return this.forecastService.getWeatherIconUrl(weatherStatus);
   }

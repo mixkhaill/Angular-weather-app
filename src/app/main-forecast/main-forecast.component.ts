@@ -10,31 +10,31 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class MainForecastComponent implements OnInit {
   weatherSearchForm: FormGroup;
-  weatherData: any;
   locations: string[] = [];
   forecasts: WeatherForecast[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private forecastService: ForecastService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.weatherSearchForm = this.formBuilder.group({
       location: [""],
     });
-    
   }
 
   sendData(formValues) {
-    this.forecastService.getWeather(formValues.location).subscribe((data: WeatherForecast) => {
-      this.forecasts.push(data);
-      this.forecastService.setForecastData(data);
-      this.addLocation(formValues.location);
-      console.log(this.forecasts, "forecasts");
-      console.log(this.locations, "locations")
-    });
+    this.forecastService
+      .getWeather(formValues.location)
+      .subscribe((data: WeatherForecast) => {
+        this.forecasts.push(data);
+        this.forecastService.setForecastData(data);
+        this.addLocation(formValues.location);
+        console.log(this.forecasts, "forecasts");
+        console.log(this.locations, "locations");
+      });
   }
 
   addLocation(location: string) {
@@ -43,12 +43,7 @@ export class MainForecastComponent implements OnInit {
     }
   }
 
-  convertKelvinToCelsius(kelvin: number): number {
-    return this.forecastService.convertKelvinToCelsius(kelvin);
-  }
-
   getWeatherIconUrl(weatherStatus: string) {
     return this.forecastService.getWeatherIconUrl(weatherStatus);
   }
-
 }

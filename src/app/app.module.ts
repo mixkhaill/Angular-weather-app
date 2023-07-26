@@ -5,11 +5,11 @@ import { APP_BASE_HREF } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
 
 import { AppComponent } from "./app.component";
-import { HelloComponent } from "./hello.component";
 import { FutureComponent } from "./future/future.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { MainForecastComponent } from "./main-forecast/main-forecast.component";
 import { ForecastService } from "./forecastService.service";
+import { KelvinToCelsiusPipe } from "./kelvin-to-celsius.pipe";
 
 @NgModule({
   imports: [
@@ -21,9 +21,9 @@ import { ForecastService } from "./forecastService.service";
   ],
   declarations: [
     AppComponent,
-    HelloComponent,
     FutureComponent,
     MainForecastComponent,
+    KelvinToCelsiusPipe,
   ],
   bootstrap: [AppComponent],
   providers: [{ provide: APP_BASE_HREF, useValue: "/" }, ForecastService],

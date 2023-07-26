@@ -29,22 +29,15 @@
         <h4>Temperatures today:</h4>
         <p>
           Current
-          {{
-            convertKelvinToCelsius(forecast.list[0].main.temp).toFixed(0)
-          }}°C - Max:
-          {{
-            convertKelvinToCelsius(forecast.list[0].main.temp_max).toFixed(
-              0
-            )
-          }}°C - Min:
-          {{
-            convertKelvinToCelsius(forecast.list[0].main.temp_min).toFixed(
-              0
-            )
-          }}°C
+          {{ forecast.list[0].main.temp | kelvinToCelsius }} - Max:
+          {{ forecast.list[0].main.temp_max | kelvinToCelsius }} - Min:
+          {{ forecast.list[0].main.temp_min | kelvinToCelsius }}
         </p>
         <p>
-          <a [routerLink]="['/future']" [queryParams]="{ cityName: forecast.city.name }">
+          <a
+            [routerLink]="['/future']"
+            [queryParams]="{ cityName: forecast.city.name }"
+          >
             >Show 5-day forecast for {{ forecast.city.name }}</a
           >
         </p>

@@ -10,10 +10,10 @@
       <!---->
       <li class="list-group-item" *ngFor="let item of forecastData.list">
         <!-- Monday, Mar 23: Rain - Min: 45 - Max: 59 -->
-        Temp: {{ convertKelvinToCelsius(item.main.temp).toFixed(0) }} -
+        Temp: {{ item.main.temp | kelvinToCelsius }} -
         {{ item.weather[0].description }} - Min:
-        {{ convertKelvinToCelsius(item.main.temp_min).toFixed(0) }} - Max:
-        {{ convertKelvinToCelsius(item.main.temp_max).toFixed(0) }}
+        {{ item.main.temp_min | kelvinToCelsius }} - Max:
+        {{ item.main.temp_max | kelvinToCelsius }}
         <img class="icon" [src]="getWeatherIconUrl(item.weather[0].main)" />
       </li>
     </ul>

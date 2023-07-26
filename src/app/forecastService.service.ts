@@ -28,10 +28,6 @@ export class ForecastService {
     return this.forecastData;
   }
 
-  convertKelvinToCelsius(kelvin: number): number {
-    return kelvin - 273.15;
-  }
-
   getWeatherIconUrl(weatherStatus: string): string {
     switch (weatherStatus) {
       case "Clear":
