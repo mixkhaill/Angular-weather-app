@@ -29,8 +29,8 @@ export class MainForecastComponent implements OnInit {
     this.forecastService
       .getWeather(formValues.location)
       .subscribe((data: WeatherForecast) => {
-        this.forecasts.push(data);
-        this.forecastService.setForecastData(data);
+        this.forecasts[formValues.location] = data;
+        this.forecastService.setForecastData(data.list);
         this.addLocation(formValues.location);
         console.log(this.forecasts, "forecasts");
         console.log(this.locations, "locations");

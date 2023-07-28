@@ -6,7 +6,7 @@ import { FutureComponent } from "./future/future.component";
 const routes: Routes = [
   { path: "", component: MainForecastComponent },
   {
-    path: "future/:cityName",
+    path: "future",
     component: FutureComponent,
   },
 ];

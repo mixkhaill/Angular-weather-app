@@ -7,21 +7,20 @@ import { Observable } from "rxjs";
   providedIn: "root",
 })
 export class ForecastService {
-  apiKey: string = "189b55c7828d643dec69d5d89b0a09f9";
+  apiKey: string = "5a4b2d457ecbef9eb2a71e480b947604";
   private forecastData: any;
   constructor(private htttp: HttpClient) {}
 
   getWeather(location): Observable<WeatherForecast> {
     return this.htttp.get<WeatherForecast>(
-      "https://api.openweathermap.org/data/2.5/forecast?q=" +
+      "https://api.openweathermap.org/data/2.5/forecast/daily?zip=" +
         location +
-        "&cnt=5&appid=" +
+        ",pl&cnt=5&appid=" +
         this.apiKey
     );
   }
   setForecastData(data: any) {
     this.forecastData = data;
-    console.log(this.forecastData);
   }
 
   getForecastData() {

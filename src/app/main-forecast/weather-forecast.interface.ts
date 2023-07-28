@@ -1,16 +1,17 @@
 export interface WeatherForecast {
-    city: {
-      name: string;
+  city: {
+    name: string;
+  };
+  list: {
+    temp: {
+      day: number;
+      max: number;
+      min: number;
     };
-    list: {
-      main: {
-        temp: number;
-        temp_max: number;
-        temp_min: number;
-      };
-      weather: {
-        description: string;
-        main: string;
-      };
+    weather: {
+      description: string;
+      main: string;
     };
-  }
+    dt: string;
+  };
+}

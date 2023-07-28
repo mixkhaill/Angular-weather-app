@@ -20,7 +20,8 @@
     </div>
   </form>
   <div *ngFor="let forecast of forecasts">
-    <div class="well flex">
+    <!-- {{ forecast | json }} -->
+    <!-- <div class="well flex">
       <div>
         <h3>{{ forecast.city.name }}</h3>
         <h4>
@@ -29,24 +30,20 @@
         <h4>Temperatures today:</h4>
         <p>
           Current
-          {{ forecast.list[0].main.temp | kelvinToCelsius }} - Max:
-          {{ forecast.list[0].main.temp_max | kelvinToCelsius }} - Min:
-          {{ forecast.list[0].main.temp_min | kelvinToCelsius }}
+          {{ forecast.list[0].temp.day | kelvinToCelsius }} - Max:
+          {{ forecast.list[0].temp.max | kelvinToCelsius }} - Min:
+          {{ forecast.list[0].temp.min | kelvinToCelsius }}
         </p>
         <p>
-          <a
-            [routerLink]="['/future']"
-            [queryParams]="{ cityName: forecast.city.name }"
-          >
+          <a [routerLink]="['/future']">
             >Show 5-day forecast for {{ forecast.city.name }}</a
           >
         </p>
       </div>
       <div>
         <span class="close">×</span>
-        <!-- <img src="https://www.angulartraining.com/images/weather/sun.png" /> -->
         <img [src]="getWeatherIconUrl(forecast.list[0].weather[0].main)" />
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
