@@ -1,6 +1,7 @@
 export interface WeatherForecast {
   city: {
     name: string;
+    zipcode: string;
   };
   list: {
     temp: {

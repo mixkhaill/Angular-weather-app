@@ -1,49 +1,84 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ForecastService } from "../forecastService.service";
-import { WeatherForecast } from "./weather-forecast.interface";
-import { ActivatedRoute } from "@angular/router";
+import { WeatherForecast } from "../weather-forecast.interface";
+import { Subscription } from 'rxjs';
+import { LocationData } from "../location.interface";
 @Component({
   selector: "app-main-forecast",
   templateUrl: "./main-forecast.component.html",
   styleUrls: ["./main-forecast.component.css"],
 })
-export class MainForecastComponent implements OnInit {
+export class MainForecastComponent implements OnInit, OnDestroy {
+  private weatherSubscriptions: Subscription[] = [];
   weatherSearchForm: FormGroup;
-  locations: string[] = [];
+  locations: LocationData[] = [];
   forecasts: WeatherForecast[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private forecastService: ForecastService,
-    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.weatherSearchForm = this.formBuilder.group({
       location: [""],
     });
+    this.locations = this.forecastService.getDisplayedLocations();
+    this.locations.forEach(location => {
+      const subscription = this.forecastService.getWeather(location.name).subscribe((data: WeatherForecast) => {
+        data.city.zipcode = location.name; 
+        this.forecasts.push(data);
+        this.forecastService.setForecastData(this.forecasts);
+        if (!this.isLocationExist(location)) {
+          this.addLocation(location);
+        }
+        console.log(this.forecasts);
+      });
+      this.weatherSubscriptions.push(subscription);
+    });
+    
+    console.log("Dane z localStorage:", this.locations);
   }
 
   sendData(formValues) {
+    const zipcode: string = formValues.location;
     this.forecastService
       .getWeather(formValues.location)
       .subscribe((data: WeatherForecast) => {
-        this.forecasts[formValues.location] = data;
-        this.forecastService.setForecastData(data.list);
-        this.addLocation(formValues.location);
+        data.city.zipcode = zipcode;
+        this.forecasts.push(data);
+        this.forecastService.setForecastData(this.forecasts); 
+        const locationData: LocationData = { name: formValues.location };
+        if (!this.isLocationExist(locationData)) {
+          this.addLocation(locationData);
+        }
+        this.forecastService.saveDisplayedLocations(this.locations);
         console.log(this.forecasts, "forecasts");
-        console.log(this.locations, "locations");
       });
   }
 
-  addLocation(location: string) {
+  isLocationExist(location: LocationData): boolean {
+    return this.locations.some(loc => loc.name === location.name);
+  }
+
+  addLocation(location: LocationData) {
     if (!this.locations.includes(location)) {
       this.locations.push(location);
     }
   }
-
   getWeatherIconUrl(weatherStatus: string) {
     return this.forecastService.getWeatherIconUrl(weatherStatus);
   }
+
+  ngOnDestroy(): void {
+    this.weatherSubscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  removeForecast(index: number) {
+    this.forecasts.splice(index, 1);
+    this.locations.splice(index, 1);
+    this.forecastService.saveDisplayedLocations(this.locations);
+  }
+
 }

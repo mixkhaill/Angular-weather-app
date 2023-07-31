@@ -19,9 +19,8 @@
       </button>
     </div>
   </form>
-  <div *ngFor="let forecast of forecasts">
-    <!-- {{ forecast | json }} -->
-    <!-- <div class="well flex">
+  <div *ngFor="let forecast of forecasts; let i = index">
+    <div class="well flex">
       <div>
         <h3>{{ forecast.city.name }}</h3>
         <h4>
@@ -35,15 +34,15 @@
           {{ forecast.list[0].temp.min | kelvinToCelsius }}
         </p>
         <p>
-          <a [routerLink]="['/future']">
+          <a [routerLink]="['/future',forecast.city.zipcode]">
             >Show 5-day forecast for {{ forecast.city.name }}</a
           >
         </p>
       </div>
       <div>
-        <span class="close">×</span>
+        <span class="close" (click)="removeForecast(i)">×</span>
         <img [src]="getWeatherIconUrl(forecast.list[0].weather[0].main)" />
       </div>
-    </div> -->
+    </div>
   </div>
 </div>
