@@ -14,5 +14,5 @@ export interface WeatherForecast {
       main: string;
     };
     dt: string;
-  };
+  }[];
 }

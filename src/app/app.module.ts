@@ -8,8 +8,8 @@ import { AppComponent } from "./app.component";
 import { FutureComponent } from "./future/future.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { MainForecastComponent } from "./main-forecast/main-forecast.component";
-import { ForecastService } from "./forecastService.service";
-import { KelvinToCelsiusPipe } from "./kelvin-to-celsius.pipe";
+import { ForecastService } from "./shared/forecastService.service";
+import { KelvinToCelsiusPipe } from "./shared/kelvin-to-celsius.pipe";
 
 @NgModule({
   imports: [

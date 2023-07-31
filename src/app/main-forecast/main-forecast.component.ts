@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { ForecastService } from "../forecastService.service";
-import { WeatherForecast } from "../weather-forecast.interface";
-import { Subscription } from 'rxjs';
-import { LocationData } from "../location.interface";
+import { ForecastService } from "../shared/forecastService.service";
+import { WeatherForecast } from "../shared/weather-forecast.interface";
+import { Subscription } from "rxjs";
+import { LocationData } from "../shared/location.interface";
 @Component({
   selector: "app-main-forecast",
   templateUrl: "./main-forecast.component.html",
@@ -17,7 +17,7 @@ export class MainForecastComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private forecastService: ForecastService,
+    private forecastService: ForecastService
   ) {}
 
   ngOnInit(): void {
@@ -25,20 +25,19 @@ export class MainForecastComponent implements OnInit, OnDestroy {
       location: [""],
     });
     this.locations = this.forecastService.getDisplayedLocations();
-    this.locations.forEach(location => {
-      const subscription = this.forecastService.getWeather(location.name).subscribe((data: WeatherForecast) => {
-        data.city.zipcode = location.name; 
-        this.forecasts.push(data);
-        this.forecastService.setForecastData(this.forecasts);
-        if (!this.isLocationExist(location)) {
-          this.addLocation(location);
-        }
-        console.log(this.forecasts);
-      });
+    this.locations.forEach((location) => {
+      const subscription = this.forecastService
+        .getWeather(location.name)
+        .subscribe((data: WeatherForecast) => {
+          data.city.zipcode = location.name;
+          this.forecasts.push(data);
+          this.forecastService.setForecastData(this.forecasts);
+          if (!this.isLocationExist(location)) {
+            this.addLocation(location);
+          }
+        });
       this.weatherSubscriptions.push(subscription);
     });
-    
-    console.log("Dane z localStorage:", this.locations);
   }
 
   sendData(formValues) {
@@ -48,18 +47,17 @@ export class MainForecastComponent implements OnInit, OnDestroy {
       .subscribe((data: WeatherForecast) => {
         data.city.zipcode = zipcode;
         this.forecasts.push(data);
-        this.forecastService.setForecastData(this.forecasts); 
+        this.forecastService.setForecastData(this.forecasts);
         const locationData: LocationData = { name: formValues.location };
         if (!this.isLocationExist(locationData)) {
           this.addLocation(locationData);
         }
         this.forecastService.saveDisplayedLocations(this.locations);
-        console.log(this.forecasts, "forecasts");
       });
   }
 
   isLocationExist(location: LocationData): boolean {
-    return this.locations.some(loc => loc.name === location.name);
+    return this.locations.some((loc) => loc.name === location.name);
   }
 
   addLocation(location: LocationData) {
@@ -72,7 +70,9 @@ export class MainForecastComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.weatherSubscriptions.forEach(subscription => subscription.unsubscribe());
+    this.weatherSubscriptions.forEach((subscription) =>
+      subscription.unsubscribe()
+    );
   }
 
   removeForecast(index: number) {
@@ -80,5 +80,4 @@ export class MainForecastComponent implements OnInit, OnDestroy {
     this.locations.splice(index, 1);
     this.forecastService.saveDisplayedLocations(this.locations);
   }
-
 }

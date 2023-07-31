@@ -4,7 +4,6 @@ import { WeatherForecast } from "./weather-forecast.interface";
 import { Observable } from "rxjs";
 import { LocationData } from "./location.interface";
 
-
 @Injectable({
   providedIn: "root",
 })
@@ -12,10 +11,10 @@ export class ForecastService {
   apiKey: string = "5a4b2d457ecbef9eb2a71e480b947604";
   private forecastData: WeatherForecast[] = [];
   private readonly localStorageKey = "displayedLocations";
-  constructor(private htttp: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   getWeather(location): Observable<WeatherForecast> {
-    return this.htttp.get<WeatherForecast>(
+    return this.http.get<WeatherForecast>(
       "https://api.openweathermap.org/data/2.5/forecast/daily?zip=" +
         location +
         ",us&cnt=5&appid=" +
@@ -25,13 +24,19 @@ export class ForecastService {
   setForecastData(data: WeatherForecast[]) {
     this.forecastData = data;
   }
-  getForecastData() {
+  getForecastData(): WeatherForecast[] {
     return this.forecastData;
   }
   saveDisplayedLocations(locations: LocationData[]): void {
     localStorage.setItem(this.localStorageKey, JSON.stringify(locations));
   }
-
+  getForecastDataForZipcode(zipcode: string): WeatherForecast | undefined {
+    if (this.forecastData) {
+      return this.forecastData.find(
+        (forecast) => forecast.city.zipcode === zipcode
+      );
+    }
+  }
   getDisplayedLocations(): LocationData[] {
     const storedLocations = localStorage.getItem(this.localStorageKey);
     return storedLocations ? JSON.parse(storedLocations) : [];
