@@ -7,13 +7,12 @@
       </h3>
     </div>
     <ul class="list-group">
-      <!---->
       <li class="list-group-item" *ngFor="let item of forecastData.list">
-        <!-- Monday, Mar 23: Rain - Min: 45 - Max: 59 -->
-        Temp: {{ item.main.temp | kelvinToCelsius }} -
+        {{ +item.dt * 1000 | date : "EEEE" }}
+        Temp: {{ item.temp.day | kelvinToCelsius }} -
         {{ item.weather[0].description }} - Min:
-        {{ item.main.temp_min | kelvinToCelsius }} - Max:
-        {{ item.main.temp_max | kelvinToCelsius }}
+        {{ item.temp.min | kelvinToCelsius }} - Max:
+        {{ item.temp.max | kelvinToCelsius }}
         <img class="icon" [src]="getWeatherIconUrl(item.weather[0].main)" />
       </li>
     </ul>
@@ -23,7 +22,6 @@
     tabindex="0"
     id="mainPageBtn"
     [routerLink]="['/']"
-    queryParamsHandling="preserve"
   >
     &lt; Back to main page
   </button>
