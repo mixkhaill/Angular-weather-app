@@ -3,6 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import { WeatherForecast } from "./weather-forecast.interface";
 import { Observable } from "rxjs";
 import { LocationData } from "./location.interface";
+import { catchError } from "rxjs/operators";
+import { throwError } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -14,11 +16,16 @@ export class ForecastService {
   constructor(private http: HttpClient) {}
 
   getWeather(location): Observable<WeatherForecast> {
-    return this.http.get<WeatherForecast>(
+    const url =
       "https://api.openweathermap.org/data/2.5/forecast/daily?zip=" +
-        location +
-        ",us&cnt=5&appid=" +
-        this.apiKey
+      location +
+      ",us&cnt=5&appid=" +
+      this.apiKey;
+
+    return this.http.get<WeatherForecast>(url).pipe(
+      catchError((error: any) => {
+        return throwError(() => error);
+      })
     );
   }
   setForecastData(data: WeatherForecast[]) {
