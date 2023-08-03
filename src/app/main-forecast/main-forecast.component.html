@@ -20,8 +20,8 @@
       </button>
     </div>
   </form>
-  <div *ngFor="let forecast of forecasts; let i = index">
-    <div class="well flex">
+  <ng-container *ngIf="forecasts && forecasts.length > 0; else noForecasts">
+    <div *ngFor="let forecast of forecasts; let i = index" class="well flex">
       <div>
         <h3>{{ forecast.city.name }}</h3>
         <h4>
@@ -29,13 +29,12 @@
         </h4>
         <h4>Temperatures today:</h4>
         <p>
-          Current
-          {{ forecast.list[0].temp.day | kelvinToCelsius }} - Max:
+          Current {{ forecast.list[0].temp.day | kelvinToCelsius }} - Max:
           {{ forecast.list[0].temp.max | kelvinToCelsius }} - Min:
           {{ forecast.list[0].temp.min | kelvinToCelsius }}
         </p>
         <p>
-          <a [routerLink]="['/future', forecast.city.zipcode]">
+          <a [routerLink]="['/future', forecast.city.zipcode]"
             >Show 5-day forecast for {{ forecast.city.name }}</a
           >
         </p>
@@ -45,5 +44,12 @@
         <img [src]="getWeatherIconUrl(forecast.list[0].weather[0].main)" />
       </div>
     </div>
-  </div>
+  </ng-container>
+  <ng-template #noForecasts>
+    <div class="well flex">
+      <div>
+        <h3>No forecasts available.</h3>
+      </div>
+    </div>
+  </ng-template>
 </div>
