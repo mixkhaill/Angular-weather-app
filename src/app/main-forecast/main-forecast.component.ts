@@ -49,23 +49,26 @@ export class MainForecastComponent implements OnInit, OnDestroy {
 
   sendData(formValues) {
     const zipcode: string = formValues.location;
-    this.forecastService.getWeather(formValues.location).subscribe({
-      next: (data: WeatherForecast) => {
-        data.city.zipcode = zipcode;
-        this.invalid = false;
-        this.forecasts.push(data);
-        this.forecastService.setForecastData(this.forecasts);
-        const locationData: LocationData = { name: formValues.location };
-        if (!this.isLocationExist(locationData)) {
-          this.addLocation(locationData);
-        }
-        this.forecastService.saveDisplayedLocations(this.locations);
-      },
-      error: (error) => {
-        console.log("Wystąpił błąd w czasie pobierania prognozy:", error);
-        this.invalid = true;
-      },
-    });
+    const subscription = this.forecastService
+      .getWeather(formValues.location)
+      .subscribe({
+        next: (data: WeatherForecast) => {
+          data.city.zipcode = zipcode;
+          this.invalid = false;
+          this.forecasts.push(data);
+          this.forecastService.setForecastData(this.forecasts);
+          const locationData: LocationData = { name: formValues.location };
+          if (!this.isLocationExist(locationData)) {
+            this.addLocation(locationData);
+          }
+          this.forecastService.saveDisplayedLocations(this.locations);
+        },
+        error: (error) => {
+          console.log("Wystąpił błąd w czasie pobierania prognozy:", error);
+          this.invalid = true;
+        },
+      });
+    this.weatherSubscriptions.push(subscription);
   }
 
   isLocationExist(location: LocationData): boolean {
